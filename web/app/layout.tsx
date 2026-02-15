@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "מערכת דיגיטלית לניהול קריאות שירות ומעקב אחר טכנאי שטח",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function RootLayout({
   children,
 }: Readonly<{
