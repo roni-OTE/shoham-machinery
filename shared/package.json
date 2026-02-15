@@ -1,0 +1,17 @@
+{
+  "name": "@shamir-milut/shared",
+  "version": "0.1.0",
+  "description": "Shared types, schemas, and constants for Shamir Milut Service Management",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "zod": "^3.23.8"
+  },
+  "peerDependencies": {
+    "zod": "^3.23.8"
+  }
+}

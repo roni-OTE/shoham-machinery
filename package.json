@@ -1,0 +1,33 @@
+{
+  "name": "shoham-machinery-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shoham Machinery & Equipment Service Management System - Monorepo",
+  "scripts": {
+    "web": "cd web && npm run dev",
+    "mobile": "cd mobile && npm start",
+    "web:build": "cd web && npm run build",
+    "web:start": "cd web && npm start",
+    "db:generate": "cd web && npm run db:generate",
+    "db:push": "cd web && npm run db:push",
+    "db:migrate": "cd web && npm run db:migrate",
+    "db:seed": "cd web && npm run db:seed",
+    "db:studio": "cd web && npm run db:studio",
+    "install:all": "npm install && cd web && npm install && cd ../mobile && npm install",
+    "clean": "rm -rf node_modules web/node_modules mobile/node_modules web/.next"
+  },
+  "workspaces": [
+    "web",
+    "mobile",
+    "shared"
+  ],
+  "keywords": [
+    "service-management",
+    "field-service",
+    "pest-control",
+    "react-native",
+    "nextjs"
+  ],
+  "author": "Your Name",
+  "license": "UNLICENSED"
+}

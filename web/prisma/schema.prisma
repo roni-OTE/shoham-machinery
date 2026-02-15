@@ -1,0 +1,213 @@
+// Prisma Schema for Shamir Milut Service Management System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============= USER MANAGEMENT =============
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique // Clerk user ID
+  email     String   @unique
+  name      String
+  phone     String?
+  role      Role     @default(TECHNICIAN)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  serviceCalls ServiceCall[]
+  workHours    WorkHour[]
+
+  @@index([role])
+  @@index([clerkId])
+  @@map("users")
+}
+
+enum Role {
+  TECHNICIAN
+  MANAGER
+  ADMIN
+}
+
+// ============= CUSTOMERS & SITES =============
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  email     String?
+  address   String?
+  notes     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  sites        Site[]
+  serviceCalls ServiceCall[]
+
+  @@map("customers")
+}
+
+model Site {
+  id         String   @id @default(cuid())
+  name       String
+  address    String?
+  contactName String?
+  contactPhone String?
+  customerId String
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  customer     Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  serviceCalls ServiceCall[]
+
+  @@index([customerId])
+  @@map("sites")
+}
+
+// ============= SERVICE CALLS =============
+
+model ServiceCall {
+  id           String     @id @default(cuid())
+  callNumber   String     @unique // Auto-generated: SC-2024-001
+  date         DateTime
+  status       CallStatus @default(PENDING)
+
+  // Relations
+  technicianId String
+  technician   User       @relation(fields: [technicianId], references: [id])
+  customerId   String
+  customer     Customer   @relation(fields: [customerId], references: [id])
+  siteId       String?
+  site         Site?      @relation(fields: [siteId], references: [id])
+
+  // Service details
+  treatmentTypes String[] // Array of treatment types: ["טיפול רגיל", "טיפול מיוחד"]
+  notes          String?  @db.Text
+
+  // Work tracking
+  workHours WorkHour[]
+  materials MaterialUsage[]
+  photos    Photo[]
+
+  // Offline sync metadata
+  isOfflineCreated Boolean  @default(false)
+  localId          String?  @unique // UUID from mobile for offline sync
+  syncedAt         DateTime?
+
+  // Metadata
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+
+  @@index([technicianId])
+  @@index([customerId])
+  @@index([siteId])
+  @@index([status])
+  @@index([date])
+  @@index([localId])
+  @@map("service_calls")
+}
+
+enum CallStatus {
+  PENDING      // הוקצתה לטכנאי
+  IN_PROGRESS  // טכנאי התחיל טיפול
+  COMPLETED    // הושלם
+  SYNCED       // סונכרן מ-offline (אם רלוונטי)
+}
+
+// ============= WORK HOURS =============
+
+model WorkHour {
+  id            String   @id @default(cuid())
+  serviceCallId String
+  technicianId  String
+
+  startTime     DateTime
+  endTime       DateTime?
+  totalMinutes  Int?     // Calculated: (endTime - startTime) in minutes
+  notes         String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  serviceCall ServiceCall @relation(fields: [serviceCallId], references: [id], onDelete: Cascade)
+  technician  User        @relation(fields: [technicianId], references: [id])
+
+  @@index([serviceCallId])
+  @@index([technicianId])
+  @@map("work_hours")
+}
+
+// ============= MATERIALS =============
+
+model Material {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  unit      String   // "ליטר", "קילו", "יחידה", etc.
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  usages MaterialUsage[]
+
+  @@map("materials")
+}
+
+model MaterialUsage {
+  id            String   @id @default(cuid())
+  serviceCallId String
+  materialId    String
+
+  quantity Float
+  notes    String?
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  serviceCall ServiceCall @relation(fields: [serviceCallId], references: [id], onDelete: Cascade)
+  material    Material    @relation(fields: [materialId], references: [id])
+
+  @@index([serviceCallId])
+  @@index([materialId])
+  @@map("material_usage")
+}
+
+// ============= PHOTOS =============
+
+model Photo {
+  id            String    @id @default(cuid())
+  serviceCallId String
+
+  url       String // Cloudinary URL
+  publicId  String // Cloudinary public_id for deletion
+  type      PhotoType @default(DURING)
+  caption   String?
+
+  createdAt DateTime @default(now())
+
+  // Relations
+  serviceCall ServiceCall @relation(fields: [serviceCallId], references: [id], onDelete: Cascade)
+
+  @@index([serviceCallId])
+  @@map("photos")
+}
+
+enum PhotoType {
+  BEFORE
+  DURING
+  AFTER
+}
