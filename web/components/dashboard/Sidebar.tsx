@@ -4,11 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const menuItems = [
-  { name: "סקירה כללית", href: "/dashboard", icon: "📊" },
-  { name: "קריאות שירות", href: "/dashboard/calls", icon: "📞" },
-  { name: "טכנאים", href: "/dashboard/technicians", icon: "👷" },
-  { name: "לקוחות ואתרים", href: "/dashboard/customers", icon: "🏢" },
-  { name: "דוחות", href: "/dashboard/reports", icon: "📈" },
+  { name: "סקירה כללית", href: "/", icon: "📊" },
+  { name: "קריאות שירות", href: "/calls", icon: "📞" },
+  { name: "טכנאים", href: "/technicians", icon: "👷" },
+  { name: "לקוחות ואתרים", href: "/customers", icon: "🏢" },
+  { name: "דוחות", href: "/reports", icon: "📈" },
 ];
 
 export default function Sidebar() {

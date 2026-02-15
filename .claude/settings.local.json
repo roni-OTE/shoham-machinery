@@ -5,7 +5,10 @@
       "Bash(npm install:*)",
       "Bash(ls:*)",
       "Bash(npm run db:generate:*)",
-      "Bash(npm run db:push:*)"
+      "Bash(npm run db:push:*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)"
     ]
   }
 }
