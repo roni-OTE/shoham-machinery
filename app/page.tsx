@@ -3,6 +3,9 @@ import { getCurrentUser } from "@/lib/auth";
 import StatsCard from "@/components/dashboard/StatsCard";
 import RecentCallsTable from "@/components/dashboard/RecentCallsTable";
 
+// Force dynamic rendering to avoid DB queries during build
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   let user = null;
 
