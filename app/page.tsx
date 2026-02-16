@@ -27,9 +27,17 @@ export default async function HomePage() {
 
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">סקירה כללית</h1>
-          <p className="text-gray-600 mt-1">ברוכים הבאים למערכת ניהול קריאות השירות</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">סקירה כללית</h1>
+            <p className="text-gray-600 mt-1">ברוכים הבאים למערכת ניהול קריאות השירות</p>
+          </div>
+          <a
+            href="/login"
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition-colors"
+          >
+            🔐 כניסה למערכת
+          </a>
         </div>
 
         {/* Stats Cards */}
