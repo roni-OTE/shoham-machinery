@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import StatsCard from "@/components/dashboard/StatsCard";
 import RecentCallsTable from "@/components/dashboard/RecentCallsTable";
+import { SignIn } from "@clerk/nextjs";
 
 // Force dynamic rendering to avoid DB queries during build
 export const dynamic = 'force-dynamic';
@@ -15,9 +16,34 @@ export default async function HomePage() {
     console.log("DB not connected yet, showing default dashboard");
   }
 
-  // If not logged in with Clerk, redirect to login
+  // If not logged in with Clerk, show login
   if (user === null) {
-    // Show default dashboard for now (demo mode)
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="max-w-md w-full">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              שוהם מכונות ומבלטים
+            </h1>
+            <p className="text-gray-600">מערכת ניהול קריאות שירות</p>
+          </div>
+          <SignIn
+            appearance={{
+              elements: {
+                rootBox: "mx-auto",
+                card: "shadow-xl",
+              },
+            }}
+            afterSignInUrl="/"
+            signUpUrl="/sign-up"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Show default dashboard for now (demo mode) - this won't show anymore
+  if (false) {
     const stats = {
       todayCalls: 12,
       weekCalls: 47,
@@ -32,12 +58,6 @@ export default async function HomePage() {
             <h1 className="text-3xl font-bold text-gray-900">סקירה כללית</h1>
             <p className="text-gray-600 mt-1">ברוכים הבאים למערכת ניהול קריאות השירות</p>
           </div>
-          <a
-            href="/login"
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition-colors"
-          >
-            🔐 כניסה למערכת
-          </a>
         </div>
 
         {/* Stats Cards */}
