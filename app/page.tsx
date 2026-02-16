@@ -1,17 +1,7 @@
 import StatsCard from "@/components/dashboard/StatsCard";
 import RecentCallsTable from "@/components/dashboard/RecentCallsTable";
-import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
 
-export const dynamic = 'force-dynamic';
-
-export default async function HomePage() {
-  const { userId } = await auth();
-
-  if (!userId) {
-    redirect("/login");
-  }
-
+export default function HomePage() {
   // TODO: Fetch real data from API
   const stats = {
     todayCalls: 12,
