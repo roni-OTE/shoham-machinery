@@ -85,10 +85,11 @@ export default function RecentCallsTable() {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-sm">
-                  <Link href={`/calls/${call.id}`}>
-                    <button className="text-blue-600 hover:text-blue-800 font-medium">
-                      צפייה
-                    </button>
+                  <Link
+                    href={`/calls/${call.id}`}
+                    className="text-blue-600 hover:text-blue-800 font-medium"
+                  >
+                    צפייה
                   </Link>
                 </td>
               </tr>
