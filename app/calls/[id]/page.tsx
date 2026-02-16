@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
-export default function ServiceCallPage({ params }: { params: { id: string } }) {
+export default function ServiceCallPage() {
   const router = useRouter();
+  const params = useParams<{ id: string }>();
   const [formData, setFormData] = useState({
     date: "2024-02-15",
     customer: "מלון תל אביב",
