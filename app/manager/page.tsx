@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import StatsCard from "@/components/dashboard/StatsCard";
 import RecentCallsTable from "@/components/dashboard/RecentCallsTable";
 
 export default function ManagerDashboard() {
-  const [viewMode, setViewMode] = useState<"manager" | "technician">("manager");
+  const router = useRouter();
 
   const stats = {
     todayCalls: 12,
@@ -14,12 +14,6 @@ export default function ManagerDashboard() {
     activeTechnicians: 5,
     pendingCalls: 8,
   };
-
-  if (viewMode === "technician") {
-    // Redirect to technician view
-    window.location.href = "/technician";
-    return null;
-  }
 
   return (
     <div className="space-y-6">
@@ -31,22 +25,13 @@ export default function ManagerDashboard() {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={() => setViewMode("manager")}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              viewMode === "manager"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+            className="px-4 py-2 rounded-lg font-medium transition-colors bg-blue-600 text-white"
           >
             תצוגת מנהל
           </button>
           <button
-            onClick={() => setViewMode("technician")}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-              viewMode === "technician"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+            onClick={() => router.push("/technician")}
+            className="px-4 py-2 rounded-lg font-medium transition-colors bg-gray-200 text-gray-700 hover:bg-gray-300"
           >
             תצוגת טכנאי
           </button>
